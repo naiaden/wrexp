@@ -33,17 +33,17 @@ def deploy_commands():
         print(server + " [" + str(nr_tasks) + "/" + str(servers.get(server,0)) + "]")
         if commands and nr_tasks < servers.get(server, 0):
             new_task = commands.pop()
-            print("\tDeploying " + new_task)
+            #print("\tDeploying " + new_task)
             remote_task = ("ssh " + server + " nohup " + new_task + " &").split(" ")
-            subprocess.call(remote_task)
+            print("\tDeploying " + str(remote_task))
+            subprocess.Popen(remote_task)
             print("\t" + str(len(commands)) + "tasks remaining")
 
 minutes_passed = 0
+check_servers()
 while True:
     if minutes_passed % 5 == 0:
         check_commands() # every 5 min
-    if minutes_passed % 5 == 0:
-        check_servers()  # every 5 min
     deploy_commands()    # every minute
     
     if not commands:
